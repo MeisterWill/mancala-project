@@ -20,7 +20,6 @@ public class Mancala {
         //Initialize Players to null
         this.player1 = null;
         this.player2 = null;
-        
     }
 
     public Mancala(Mancala mancala){ //copy constructor, players are kept the same
@@ -252,7 +251,7 @@ public class Mancala {
 
     public static void main(String[] args) {
         RandomPlayer player1 = new RandomPlayer();
-        DepthPlayer player2 = new DepthPlayer(1);
-        runGame(player1, player2);
+        DepthPlayer player2 = new DepthPlayer(6);
+        compareAlgorithms(100, player1, player2);
     }
 }

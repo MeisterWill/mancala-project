@@ -30,10 +30,10 @@ public class DepthPlayer implements Player {
     public int getMove() {
         int move = getMoveAtDepth(depth);
         //System.out.println("Best move is " + move);
-        return getMoveAtDepth(depth);
+        return move;
     }
 
-    private int getMoveAtDepth(int depth){ 
+    public int getMoveAtDepth(int depth){ 
         //Recursive Algorithm that evaluates all possible moves and selects the combination of moves that
         //results in the best score difference for the DepthPlayer while both players are evaluating their best moves
         //at decreasing depths.
@@ -44,7 +44,7 @@ public class DepthPlayer implements Player {
         if(depth == 1){
             for(int i = 5; i >= 0; i--){ //For each possible move, 
                 if(mancala.isValidMove(i)){
-                    Mancala config = new Mancala(this.mancala); 
+                    Mancala config = createConfiguration(); 
                     Player configPlayer;
                     if(config.getPlayerToMove() == config.getPlayer1()){
                         configPlayer = config.getPlayer1(); 
@@ -52,6 +52,26 @@ public class DepthPlayer implements Player {
                         configPlayer = config.getPlayer2(); 
                     }
                     config.makeMove(i);
+                    if(((DepthPlayer)configPlayer).getScoreDiff() > bestScoreDiff){
+                        bestMove = i;
+                        bestScoreDiff = ((DepthPlayer)configPlayer).getScoreDiff();
+                    }
+                }
+                
+            }
+        }
+        else{ //depth > 1
+            for(int i = 5; i >= 0; i--){ //For each possible move, 
+                if(mancala.isValidMove(i)){
+                    Mancala config = createConfiguration(); 
+                    Player configPlayer;
+                    if(config.getPlayerToMove() == config.getPlayer1()){
+                        configPlayer = config.getPlayer1(); 
+                    }   else{
+                        configPlayer = config.getPlayer2(); 
+                    }
+                    config.makeMove(i);
+                    config.makeMove(((DepthPlayer)(config.getPlayerToMove())).getMoveAtDepth(depth - 1));
                     if(((DepthPlayer)configPlayer).getScoreDiff() > bestScoreDiff){
                         bestMove = i;
                         bestScoreDiff = ((DepthPlayer)configPlayer).getScoreDiff();
@@ -82,9 +102,29 @@ public class DepthPlayer implements Player {
         return board[1][6];
     }
 
+    private Mancala createConfiguration(){
+        Mancala config = new Mancala(this.mancala); //Copy the mancala
+        boolean player1ToMove;
+        if(config.getPlayer1().equals(config.getPlayerToMove())){
+            player1ToMove = true;
+        }   else{
+            player1ToMove = false;
+        }
+        config.setPlayer1(new DepthPlayer(depth)); //Create new players
+        config.setPlayer2(new DepthPlayer(depth));
+        config.getPlayer1().setMancala(config);
+        config.getPlayer2().setMancala(config);
+        if(player1ToMove){
+            config.setPlayerToMove(config.getPlayer1());
+        }   else{
+            config.setPlayerToMove(config.getPlayer2());
+        }
+        return config;
+    }
+
     public static void main(String[] args) {
         HumanPlayer player1 = new HumanPlayer("Player 1");
-        DepthPlayer player2 = new DepthPlayer(1);
+        DepthPlayer player2 = new DepthPlayer(2);
         Mancala.runGame(player1, player2);
     }
 

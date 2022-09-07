@@ -1,9 +1,9 @@
 import java.util.Scanner;
 
 public class HumanPlayer implements Player {
-    Mancala mancala;
-    Scanner scanner;
-    String name;
+    private Mancala mancala;
+    private Scanner scanner;
+    private String name;
 
 
     public HumanPlayer(){
@@ -43,5 +43,10 @@ public class HumanPlayer implements Player {
             return board[0][6];
         }
         return board[1][6];
+    }
+
+    @Override
+    public Player copyPlayer() {
+        return new HumanPlayer(this.name);
     }
 }

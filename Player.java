@@ -3,4 +3,5 @@ public interface Player {
     String getName();
     void setMancala(Mancala mancala);
     int getScore();
+    Player copyPlayer();
 }

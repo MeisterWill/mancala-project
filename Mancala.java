@@ -25,10 +25,15 @@ public class Mancala {
 
     public Mancala(Mancala mancala){ //copy constructor, players are kept the same
         this.moveCount = mancala.moveCount;
-        this.player1 = mancala.player1; //This is bad, its changing the original player1 and 2 instead of copies
-        this.player2 = mancala.player2;
+        this.player1 = mancala.player1.copyPlayer();
+        this.player2 = mancala.player2.copyPlayer();
         this.player1.setMancala(this);
         this.player2.setMancala(this);
+        if(mancala.getPlayerToMove() == mancala.getPlayer1()){
+            this.playerToMove = this.player1;
+        }   else{
+            this.playerToMove = this.player2;
+        }
         this.board = new int[2][7];
         for(int i = 0; i < 6; i++){
             this.board[0][i] = mancala.getBoard()[0][i];
@@ -246,10 +251,8 @@ public class Mancala {
     }
 
     public static void main(String[] args) {
-
-        //Runs a human v human game for ad hoc
-        HumanPlayer player1 = new HumanPlayer("Player 1");
-        HumanPlayer player2 = new HumanPlayer("Player 2");
+        RandomPlayer player1 = new RandomPlayer();
+        DepthPlayer player2 = new DepthPlayer(1);
         runGame(player1, player2);
     }
 }

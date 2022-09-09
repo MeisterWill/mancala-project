@@ -24,15 +24,8 @@ public class Mancala {
 
     public Mancala(Mancala mancala){ //copy constructor, players are kept the same
         this.moveCount = mancala.moveCount;
-        this.player1 = mancala.player1.copyPlayer();
-        this.player2 = mancala.player2.copyPlayer();
-        this.player1.setMancala(this);
-        this.player2.setMancala(this);
-        if(mancala.getPlayerToMove() == mancala.getPlayer1()){
-            this.playerToMove = this.player1;
-        }   else{
-            this.playerToMove = this.player2;
-        }
+        this.player1 = null;
+        this.player2 = null;
         this.board = new int[2][7];
         for(int i = 0; i < 6; i++){
             this.board[0][i] = mancala.getBoard()[0][i];
@@ -251,7 +244,9 @@ public class Mancala {
 
     public static void main(String[] args) {
         RandomPlayer player1 = new RandomPlayer();
-        DepthPlayer player2 = new DepthPlayer(6);
-        compareAlgorithms(100, player1, player2);
+        DepthPlayer player2 = new DepthPlayer(2);
+        DepthPlayer player3 = new DepthPlayer(3);
+        compareAlgorithms(10000, player2, player1);
+        compareAlgorithms(10000, player3, player1);
     }
 }

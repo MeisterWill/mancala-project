@@ -65,13 +65,13 @@ public class DepthPlayer implements Player {
                 if(mancala.isValidMove(i)){
                     Mancala config = createConfiguration(); 
                     Player configPlayer;
-                    if(config.getPlayerToMove() == config.getPlayer1()){
+                    if(config.getPlayerToMove() == config.getPlayer1()){ //Establish the player for whom the score diff is being evaluated
                         configPlayer = config.getPlayer1(); 
                     }   else{
                         configPlayer = config.getPlayer2(); 
                     }
-                    config.makeMove(i);
-                    config.makeMove(((DepthPlayer)(config.getPlayerToMove())).getMoveAtDepth(depth - 1));
+                    config.makeMove(i); //make the starting move
+                    config.makeMove(((DepthPlayer)(config.getPlayerToMove())).getMoveAtDepth(depth - 1)); //ev
                     if(((DepthPlayer)configPlayer).getScoreDiff() > bestScoreDiff){
                         bestMove = i;
                         bestScoreDiff = ((DepthPlayer)configPlayer).getScoreDiff();
@@ -104,17 +104,11 @@ public class DepthPlayer implements Player {
 
     private Mancala createConfiguration(){
         Mancala config = new Mancala(this.mancala); //Copy the mancala
-        boolean player1ToMove;
-        if(config.getPlayer1().equals(config.getPlayerToMove())){
-            player1ToMove = true;
-        }   else{
-            player1ToMove = false;
-        }
         config.setPlayer1(new DepthPlayer(depth)); //Create new players
         config.setPlayer2(new DepthPlayer(depth));
         config.getPlayer1().setMancala(config);
         config.getPlayer2().setMancala(config);
-        if(player1ToMove){
+        if(this.mancala.getPlayer1().equals(this.mancala.getPlayerToMove())){
             config.setPlayerToMove(config.getPlayer1());
         }   else{
             config.setPlayerToMove(config.getPlayer2());
@@ -128,6 +122,4 @@ public class DepthPlayer implements Player {
         Mancala.runGame(player1, player2);
     }
 
-    
-    
 }
